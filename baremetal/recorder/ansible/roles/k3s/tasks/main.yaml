@@ -1,0 +1,45 @@
+- name: add Nvidia Contaner Runtime keyring
+  apt_key:
+    url: https://nvidia.github.io/nvidia-container-runtime/gpgkey
+    state: present
+- name: add Nvidia Contaner Runtime repository
+  get_url:
+    url: 'https://nvidia.github.io/nvidia-container-runtime/{{ ansible_distribution | lower }}{{ ansible_distribution_version }}/nvidia-container-runtime.list'
+    dest: '/etc/apt/sources.list.d/nvidia-container-runtime.list'
+
+- name: force an apt update
+  apt:
+    update_cache: true
+  changed_when: false
+- name: Install Nvidia Contaner Runtime
+  apt: 
+    pkg:
+      - 'nvidia-container-runtime'
+- name: Check k3s install
+  stat:
+    path: /etc/rancher/k3s/k3s.yaml
+  register: k3syaml
+- name: Install k3s
+  shell: 'curl -sfL https://get.k3s.io | sh -'
+  when: k3syaml.stat.exists == false
+- name: Get k8s config
+  shell: 'cat /etc/rancher/k3s/k3s.yaml'
+  register: k8syaml
+  changed_when: false 
+- name: Show k8s config
+  debug:
+    msg: '{{ k8syaml.stdout }}'
+  changed_when: false  
+- name: Check runtime class
+  shell: k3s kubectl get runtimeclass
+  register: runtimeclass
+  changed_when: false 
+- name: Install runtime class
+  block:
+    - name: copy manifest
+      copy:
+        src: nvidia.runtimeclass.yaml
+        dest: ~/nvidia.runtimeclass.yaml
+    - name: install manifest
+      shell: k3s kubectl apply -f ~/nvidia.runtimeclass.yaml
+  when: runtimeclass.stderr == 'No resources found'

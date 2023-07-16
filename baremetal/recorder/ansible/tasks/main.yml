@@ -1,4 +1,0 @@
-- name: Install nvidia drivers
-  apt:
-    - linux-headers-{{ansible_kernel}}
-    - 

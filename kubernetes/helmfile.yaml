@@ -1,0 +1,10 @@
+repositories:
+  - name: nvdp
+    url: https://nvidia.github.io/k8s-device-plugin
+releases:
+  - name: nvidia-device-plugin
+    namespace: nvidia-device-plugin
+    createNamespace: true
+    chart: nvdp/nvidia-device-plugin
+    values:
+      - runtimeClassName: nvidia     
