@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: epg-station
+    app.kubernetes.io/name: mysql
+  name: mysql
+  namespace: epg-station
+spec:
+  podManagementPolicy: OrderedReady
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mysql
+  serviceName: mysql
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/managed-by: epg-station
+        app.kubernetes.io/name: mysql
+    spec:
+      containers:
+      - args:
+        - --character-set-server=utf8mb4
+        - --collation-server=utf8mb4_unicode_ci
+        - --performance-schema=false
+        - --expire_logs_days=1
+        env:
+        - name: MYSQL_DATABASE
+          value: epgstation
+        - name: MYSQL_PASSWORD
+          value: epgstation
+        - name: MYSQL_ROOT_PASSWORD
+          value: epgstation
+        - name: MYSQL_USER
+          value: epgstation
+        - name: TZ
+          value: Asia/Tokyo
+        image: mariadb:10.5
+        imagePullPolicy: IfNotPresent
+        name: mysql
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: mysql-db
+      restartPolicy: Always
+  updateStrategy:
+    rollingUpdate:
+      partition: 0
+    type: RollingUpdate
+  volumeClaimTemplates:
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: mysql-db
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+      storageClassName: longhorn
+

@@ -1,0 +1,11 @@
+resources:
+  - deployment.yaml
+  - service.yaml
+configMapGenerator:
+  - name: mirakurun
+    namespace: epg-station
+    files:
+      - configmap/channels.yml
+      - configmap/install-recpt1.sh
+      - configmap/server.yml
+      - configmap/tuners.yml

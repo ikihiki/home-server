@@ -1,0 +1,11 @@
+#cloud-config
+timezone: Asia/Tokyo
+locale: ja_JP.utf8
+users:
+- name: admin
+  groups: users, admin
+  sudo: ALL=(ALL) NOPASSWD:ALL
+  lock_passwd: false
+  hashed_passwd: $6$7b32mBZF09wEjCUg$VgyWex/KZbCI/4E0r33KoKnT81oONPF/d7XPjn5jg9GCSnwPpnf0/aMyajMZTnzmtJ4ei18SVy4XtMOiI0Yol/
+  ssh_import_id:
+    - gh:ikihiki

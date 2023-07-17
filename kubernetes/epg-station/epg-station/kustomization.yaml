@@ -1,0 +1,20 @@
+resources:
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+  - data.persistentvolumeclaim.yaml
+  - thumbnail.persistentvolumeclaim.yaml
+configMapGenerator:
+  - name: epg-station
+    namespace: epg-station
+    files:
+      - configmap/config.yml
+      - configmap/enc.js
+      - configmap/epgUpdaterLogConfig.yml
+      - configmap/operatorLogConfig.yml
+      - configmap/serviceLogConfig.yml
+secretGenerator:
+  - name: epg-station-gdrive-secret
+    namespace: epg-station
+    files:
+      - secret/gdrive_secret.tar

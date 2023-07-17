@@ -1,0 +1,9 @@
+releases:
+  - chart: ./mysql
+    name: epg-station-mysql
+  - chart: ./mirakurun
+    name: mirakurun
+  - chart: ./epg-station
+    name: epg-station
+  - chart: ./avahi-publish
+    name: epg-station-mdns

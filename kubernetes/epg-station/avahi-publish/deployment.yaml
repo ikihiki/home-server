@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: avahi-publish
+  namespace: epg-station
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: avahi-publish
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        container.apparmor.security.beta.kubernetes.io/avahi-publish: unconfined
+      labels:
+        app: avahi-publish
+    spec:
+      containers:
+      - args:
+        - /bin/sh
+        - -c
+        - apt update && apt install -y  avahi-utils && avahi-publish -a -R $HOST_NAME
+          $NODE_IP
+        env:
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.hostIP
+        - name: HOST_NAME
+          value: epg-station.local
+        image: ubuntu
+        imagePullPolicy: Always
+        name: avahi-publish
+        resources:
+          limits:
+            cpu: "1"
+            memory: 1Gi
+        volumeMounts:
+        - mountPath: /var/run/dbus/system_bus_socket
+          name: dbus
+      restartPolicy: Always
+      volumes:
+      - hostPath:
+          path: /var/run/dbus/system_bus_socket
+          type: Socket
+        name: dbus
+

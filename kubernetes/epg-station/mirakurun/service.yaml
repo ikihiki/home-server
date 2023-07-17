@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: epg-station
+    app.kubernetes.io/name: mirakurun
+  name: mirakurun
+  namespace: epg-station
+spec:
+  ports:
+  - name: "40772"
+    nodePort: 31651
+    port: 40772
+    protocol: TCP
+    targetPort: 40772
+  - name: "9229"
+    nodePort: 32289
+    port: 9229
+    protocol: TCP
+    targetPort: 9229
+  selector:
+    app.kubernetes.io/name: mirakurun
+  type: NodePort
