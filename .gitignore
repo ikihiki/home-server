@@ -1,2 +1,4 @@
 .vagrant
 gdrive_secret.tar
+/kubernetes/tekton/*
+!/kubernetes/tekton/kustomization.yaml

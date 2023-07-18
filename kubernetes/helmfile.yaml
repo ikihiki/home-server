@@ -7,4 +7,6 @@ releases:
     createNamespace: true
     chart: nvdp/nvidia-device-plugin
     values:
-      - runtimeClassName: nvidia     
+      - runtimeClassName: nvidia
+  # - name: tekton
+  #   chart: ./tekton

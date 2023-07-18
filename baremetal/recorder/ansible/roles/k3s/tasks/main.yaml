@@ -11,10 +11,11 @@
   apt:
     update_cache: true
   changed_when: false
-- name: Install Nvidia Contaner Runtime
+- name: Install Packages
   apt: 
     pkg:
       - 'nvidia-container-runtime'
+      - 'curl'
 - name: Check k3s install
   stat:
     path: /etc/rancher/k3s/k3s.yaml

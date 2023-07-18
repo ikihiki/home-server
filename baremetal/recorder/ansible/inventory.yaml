@@ -1,6 +1,6 @@
 all:
   hosts:
     azure:
-      ansible_host: 20.222.62.106
-      ansible_user: azureuser
-      ansible_ssh_private_key_file: ~/.ssh/k8s-test_key.pem
+      ansible_host: 192.168.10.108
+      ansible_user: hideaki
+      ansible_ssh_private_key_file: ~/.ssh/id_ed25519

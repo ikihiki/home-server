@@ -1,6 +1,6 @@
 - hosts: all
   become: yes
   roles:
-  # - role: nvidia.nvidia_driver
-  #   nvidia_driver_branch: 535
+  - role: nvidia.nvidia_driver
+    nvidia_driver_branch: 535
   - role: k3s
