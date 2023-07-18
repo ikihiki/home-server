@@ -1,0 +1,6 @@
+resources:
+  - namespace.yaml
+  - home.pvc.yaml
+  - vscode.configmap.yaml
+  - vscode.deployment.yaml
+

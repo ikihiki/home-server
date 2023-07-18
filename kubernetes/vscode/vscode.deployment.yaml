@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: vscode
+    app.kubernetes.io/name: vscode
+  name: vscode
+  namespace: vscode
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: vscode
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/managed-by: vscode
+        app.kubernetes.io/name: vscode
+    spec:
+      containers:
+      - env:
+        - name: TZ
+          value: Asia/Tokyo
+        image: ubuntu
+        name: vscode
+        command: ["/bin/bash"]
+        args:
+          - "/config/init.sh"
+        workingDir: /root
+        volumeMounts:
+        - mountPath: /root
+          name: home
+        - mountPath: /recorded
+          name: recorded
+        - mountPath: /config
+          name: config
+      restartPolicy: Always
+      volumes:
+      - name: home
+        persistentVolumeClaim:
+          claimName: vscode-home
+      - configMap:
+          defaultMode: 500
+          name: vscode
+        name: config
+      - hostPath:
+          path: /recorded
+          type: ""
+        name: recorded
+

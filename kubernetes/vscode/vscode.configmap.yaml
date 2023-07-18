@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vscode
+  namespace: vscode
+data:
+  init.sh: |-
+    echo hello
+    apt update
+    apt install -y curl git
+    curl -Lk 'https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-x64' --output vscode_cli.tar.gz
+    tar -xf vscode_cli.tar.gz
+    ./code tunnel --accept-server-license-terms --name k8s-home
